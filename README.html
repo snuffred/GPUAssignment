@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>VU ACCE Course &lpar;XM&lowbar;0171&rpar; - GPU Group Assignment</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="vu-acce-course-xm_0171---gpu-group-assignment">VU ACCE Course (XM_0171) - GPU Group Assignment</h1>
+<h2 id="assignment-description">Assignment Description</h2>
+<p>The problem for this assignment is grid-based, iterative simulation of rainwater flood over a 30x30 KM terrain.
+It features a cloud front moving across a region of land characterized by a heightmap.
+The input parameters include the grid size (finer grid size will increase the resolution and the level of details of the simulation), ground configuration (one of four presets), termination conditions and cloud configuration.</p>
+<p>The algorithm works as follows:</p>
+<ol>
+<li>Move all clouds across the grid based on their direction and velocity and add their rain to the water level.</li>
+<li>The water is redistributed among neighbors. Given a cell we:
+<ol>
+<li>Compute the potential water flow to adjacent cells in the grid.</li>
+<li>Distribute the water across the adjacent cells, proportionally to the to the relative differences of their total height (ground + water level).</li>
+</ol>
+</li>
+<li>Update the water array with the computed spillage.</li>
+</ol>
+<p>The algorithms repeats steps 1-3 until one of the following conditions is satisfied:</p>
+<ul>
+<li>None of the grid cells have a water flow exceeding a threshold.</li>
+<li>A maximum number of iterations (minutes) is reached.</li>
+</ul>
+<p>Step 2 lets the water flow the from higher regions to lower ones, gradually reducing height differences and tending towards equalizing levels. Out-of-bounds cells are treated as dry cells with the same height as their in-bounds neighbor.</p>
+<p><strong>Note:</strong> Further details can be found in the Assignment description provided as PDF.</p>
+<p>We want you to implement a parallel implementation of this algorithm with CUDA. We suggest you not change this algorithm in your parallel code. There might be floating point errors if you parallelize the algorithm in different ways, but the workflow should be (mathematically) the same.</p>
+<h2 id="structure">Structure</h2>
+<p>The structure of this project template is as follows:</p>
+<p>The <code>flood.c</code> contains the main and I/O components (e.g., reading the input file, writing the results) of the program. In principle, this file does not need to be modified.
+The <code>flood_seq.c</code> file is the sequential reference implementation, and should be used as the ground truth for correctness.</p>
+<p>Some initialization logic is implemented in <code>flood.c</code>. While the default implementation is sufficient for completing the assignment, you are allowed to modify the data structures used by your custom implementation and make the corresponding changes in this file if needed to support optimizations.</p>
+<p>You need to implement your simulation function in <code>do_compute</code> with CUDA in the file <code>flood_cuda.cu</code>.
+In the template, the function <code>do_compute</code>, which actually performs the algorithm, is just a copy of the CPU sequential version.</p>
+<h3 id="input">Input</h3>
+<p>The input consists of a series of command line arguments</p>
+<ul>
+<li><code>&lt;rows&gt;</code>: Number of rows in the cell array.</li>
+<li><code>&lt;columns&gt;</code>: Number of columns in the cell array.</li>
+<li><code>&lt;ground scenario (M|V|D|d)&gt;</code>: The heights of the terrain cells are stored in an array.
+The program includes four predefined terrain scenarios, which are selected using a single-character code:
+<ul>
+<li><code>M</code>: Mountain lakes.</li>
+<li><code>V</code>: Valley.</li>
+<li><code>D</code>: Valley with a dam at slightly higher elevations.</li>
+<li><code>d</code>: Valley with a dam at lower elevations.</li>
+</ul>
+</li>
+<li><code>&lt;threshold&gt;</code> The simulation stops when the highest amount of water discharged from one cell to another falls below this threshold.</li>
+<li><code>&lt;num minutes&gt;</code> The simulation stops after this number of minutes has been simulated.</li>
+<li><code>&lt;exaggeration factor&gt;</code> Multiplier for the rainfall discharge intensity.
+It allows for a less realistic but faster simulation.
+For example, a value of 60 means that in one minute, the amount of rainwater corresponding to one hour is discharged.</li>
+<li><code>&lt;front distance&gt;</code> Distance between the center of the simulation domain and the center of the cloud front.</li>
+<li><code>&lt;front width&gt;</code> Width of the cloud front.</li>
+<li><code>&lt;front depth&gt;</code> Depth of the cloud front.
+These two parameters (width and depth) define the dimensions of the rectangular region within which random clouds are generated.
+This region is rotated and translated based on the other parameters in order to correctly position the front, so that its direction leads the clouds into the domain.</li>
+<li><code>&lt;front direction (degrees)&gt;</code> Direction of the cloud front in degrees.</li>
+<li><code>&lt;num random clouds&gt;</code> Number of clouds generated in the front.</li>
+<li><code>&lt;cloud max radius (km)&gt;</code> Maximum radius of the clouds.
+For each cloud, a radius is generated randomly between this value and its half.</li>
+<li><code>&lt;cloud max intensity (mm/h)&gt;</code> Maximum rainfall intensity.
+For each cloud, an intensity is generated randomly between this value and its half.
+Rainfall intensity is considered:
+<ul>
+<li><code>Normal</code>: up to 15 mm/h,</li>
+<li><code>Heavy</code>: 15–30 mm/h,</li>
+<li><code>Very Heavy</code>: 30–60 mm/h,</li>
+<li><code>Torrential</code>: above 60 mm/h.  Torrential rainfall exceeding 120–140 mm/h is rare but realistic.</li>
+</ul>
+</li>
+<li><code>&lt;cloud max speed (km/h)&gt;</code> Maximum speed.
+Each cloud is assigned a speed randomly between this value and its half.</li>
+<li><code>&lt;cloud max angle aperture (degrees)&gt;</code> Maximum aperture angle.
+Each cloud’s movement direction is randomly selected within the range defined by the front direction plus or minus half of this angle.</li>
+<li><code>&lt;clouds rnd seed&gt;</code> Random seed used to reproduce the cloud generation in the front.</li>
+</ul>
+<p>Additional clouds can be added by providing additional optional arguments (6 per cloud).
+You can write your own script to generate arbitrary cloud formations and use these arguments to test them within your simulation.</p>
+<ul>
+<li><code>&lt;cloud start x (km)&gt;</code> Initial x-coordinate of the cloud centre.</li>
+<li><code>&lt;cloud start y (km)&gt;</code> Initial y-coordinate of the cloud centre.</li>
+<li><code>&lt;cloud radius (km)&gt;</code> Radius of the cloud.</li>
+<li><code>&lt;cloud intensity (mm/h)&gt;</code> Rainfall intensity.</li>
+<li><code>&lt;cloud speed (km/h)&gt;</code> Cloud speed.</li>
+<li><code>&lt;cloud angle (degrees)&gt;</code> Direction of cloud movement, in degrees.</li>
+</ul>
+<p>These arguments enable the creation of custom scenarios with different spatial and temporal dynamics, as well as varying computational demands in the different phases of the simulation.</p>
+<p>For your convenience, a few test sequences are provided within the <code>test_files</code> folder, which can be run using</p>
+<pre><code class="language-bash">./flood_seq $(&lt; test_files/debug.in)
+</code></pre>
+<p>These includes:</p>
+<ul>
+<li><code>debug.in</code> a low resolution scenario useful for debugging.</li>
+<li><code>small_mountains.in</code> a low resolution mountain scenario.</li>
+<li><code>custom_clouds.in</code> a low resolution dam scenario with custom clouds.</li>
+<li><code>medium_lower_dam.in</code> and <code>medium_higher_dam.in</code> two medium resolution dam scenarios.</li>
+<li><code>large_mountains.in</code> a higher resolution mountain scenario (expected sequential running time on DAS5 is approximately 3 minutes).</li>
+</ul>
+<h3 id="output">Output</h3>
+<p>At the end of execution, the program prints the execution time (in seconds, excluding the initialization phase) and a set of aggregated statistics that helps verify the correctness of the results. For instance:</p>
+<pre><code class="language-bash">Time: 0.069946
+Result: 350, 55,   1.093845,  11.164813, 7373.742188, 5309.645996, 2063.282471
+
+Check precision loss:   0.813839
+</code></pre>
+<p>The statistics reported under <code>Result</code> include:</p>
+<ol>
+<li>the total number of iterations executed</li>
+<li>the iteration at which the highest amount of water was transferred between two cells</li>
+<li>the maximum amount of water transferred in a single step</li>
+<li>the highest water level reached in any cell</li>
+<li>the total amount of rainwater discharged by the clouds</li>
+<li>the total amount of water remaining on the ground at the end of the simulation</li>
+<li>the amount of water lost through the boundaries of the terrain</li>
+</ol>
+<p>To verify correctness, the results of the parallel implementation are compared against those of the provided sequential reference implementation (ground truth):</p>
+<ul>
+<li>the first statistic must match exactly</li>
+<li>statistics [3-7] may exhibit small numerical differences due to floating-point rounding effects that can accumulate during the execution. For these values, a small relative error is tolerated.</li>
+</ul>
+<p>The reported &quot;Check precision loss&quot; summarizes the deviation in the last 3 statistics, and is acceptable if those 3 statistics are within the described margin.</p>
+<p>To automate correctness checking, you can use the provided <code>test_files/check_correctness.py</code> verification script. The scripts expects two input files:</p>
+<ol>
+<li>the output of the sequential (reference) program</li>
+<li>the output of your CUDA implementation.</li>
+</ol>
+<p>A typical workflow is the following</p>
+<pre><code class="language-bash"><span class="hljs-comment"># Run the sequential version</span>
+$ prun -np 1 -native <span class="hljs-string">&#x27;-C gpunode&#x27;</span> ./flood_seq $(<span class="hljs-built_in">cat</span> test_files/small_mountains.in) &gt; res_seq.out
+
+<span class="hljs-comment"># Run the CUDA version</span>
+$ prun -np 1 -native <span class="hljs-string">&#x27;-C gpunode&#x27;</span> ./flood_cuda $(<span class="hljs-built_in">cat</span> test_files/small_mountains.in) &gt; res_cuda.out
+
+<span class="hljs-comment"># Compare the results</span>
+$ python3 test_files/check_correctness.py res_seq.out res_cuda.out
+</code></pre>
+<p>The script verifies that results are within the allowed tolerance and, if your implementation is correct, it will report:</p>
+<pre><code class="language-bash">Your output matches the reference.
+</code></pre>
+<h3 id="compilation">Compilation</h3>
+<p>To compile the source code on DAS-5, load <code>cuda12.6/toolkit</code> first:</p>
+<pre><code class="language-bash">module load cuda12.6/toolkit
+</code></pre>
+<p>Then compile with the makefile by running <code>make all</code> or the specific targets.</p>
+<h3 id="execution">Execution</h3>
+<p>You can run the sequential code with the following command:</p>
+<pre><code class="language-bash">./flood_seq &lt;rows&gt; &lt;columns&gt; &lt;ground scenario&gt; &lt;threshold&gt; &lt;time&gt; &lt;ex_factor&gt; &lt;cloud dist&gt; &lt;cloud width&gt; &lt;cloud depth&gt; &lt;front direction&gt; &lt;rng cloud count&gt; &lt;radius&gt; &lt;intensity&gt; &lt;speed&gt; &lt;angle aperture&gt; &lt;seed&gt; &lt;optional additional clouds&gt;
+</code></pre>
+<p>You may consider adding a script to assist with running these tests, using either the Makefile, bash, python or another approach of your choosing.
+For an example, look at the arguments in the previous section or run <code>make test_seq</code> (note, depending on your shell you might need using double <code>$$</code> signs).</p>
+<p><strong>NOTE: Always run with a compute node on DAS-5 to evaluate the performance, and do not execute with the head node. You need to use <code>prun</code>, <code>sbatch</code>, or other approaches to run your code on a DAS-5 compute node:</strong></p>
+<p>It is recommended that all your experiments run on the same compute node.
+For example, to run on a TitanX GPU you can append that to the gpunode argument:</p>
+<pre><code class="language-bash">prun -np 1 -native <span class="hljs-string">&#x27;-C gpunode,TitanX&#x27;</span> ./flood_cuda [arguments...]
+</code></pre>
+<h3 id="debug">Debug</h3>
+<p>To more comprehensively test correctness you may compile with the <code>-DDEBUG</code> flag (for example, using <code>make debug</code>) and compare the output to the reference implementation. <strong>Note:</strong> currently <code>make</code> rules are implemented only for the sequential version, but you can make your own.</p>
+<p>The <code>DEBUG</code> flag, activates sections of the code that print to the standard output the arguments read, the terrain height matrix, the list of generated clouds with their corresponding data, and, at each simulation step, the changes in the terrain water level matrix.
+This mode can be useful for detecting possible errors or for gaining a better understanding of the program’s behavior with very small test cases.</p>
+<p>Alternatively, you can set p.final_matrix to 1 at the start of the main function in <code>flood.c</code>, which print the water levels only once at the end of the simulation.</p>
+<p>If the program is compiled with both <code>-DDEBUG</code> and <code>-DANIMATION</code> (e.g., using <code>make animation</code>), additional parts of the code are activated that write to the standard output the data and matrices required to generate an animation of the simulation. To do so, redirect the program output to a file and run the provided Python script (<code>test_files/animation.py</code>) with that file as input.
+The script first displays the terrain; after a key is pressed, it proceeds to generate the simulation. The resulting animation is saved as an MP4 file.
+<strong>Note:</strong> the <code>animation.py</code> script requires external packages not installed on DAS5 and considerable time also for small scenarios. Therefore run the script on your own computer.</p>
+<h2 id="resources">Resources</h2>
+<p>CUDA documents: <a href="https://docs.nvidia.com/cuda/archive/12.6.0/">https://docs.nvidia.com/cuda/archive/12.6.0/</a></p>
+<p>CUDA debugging: <a href="https://docs.nvidia.com/cuda/cuda-gdb/index.html">https://docs.nvidia.com/cuda/cuda-gdb/index.html</a></p>
+<p>CUDA profiling: <a href="https://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof">https://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof</a></p>
+<h2 id="evaluation">Evaluation</h2>
+<h3 id="correctness">Correctness</h3>
+<p>The provided input data files cover various grid and cloud configurations.
+We will check the correctness with at least the 4 input files (<code>small_mountains.in</code>, <code>custom_clouds.in</code>, <code>medium_lower_dam.in</code>, and <code>medium_higher_dam.in</code>,) available under <code>test_files</code> and compare with the outputs from the provided sequential versions, using the provided <code>check_correctness.py</code> script.</p>
+<p>Since the program uses single-precision floating-point arithmetic, small numerical differences may arise between CPU and GPU implementations, especially for larger or more complex scenarios (e.g., higher-resolution grids). For this reason, a limited deviation is permitted in the final results. <strong>We therefore recommend performing correctness checks on smaller test cases, such as the four provided scenarios, where these discrepancies remain minimal and easier to interpret.</strong></p>
+<h3 id="performance">Performance</h3>
+<p>Provided that your code is correct (as defined above), you can show the performance with other input files (containing more points, higher dimensions, more clusters, etc.).
+To do this, make your own <code>test_files/*.in</code> files using the parameters described in the execution section.</p>
+<p>To analyze the speedup, you need to find a set of representative test cases. For instance, to test your speedup for larger grids and more clouds you can run the <code>large_mountains.in</code> arguments, which have higher numbers for these parameters:</p>
+<pre><code class="language-bash">prun -np 1 -native <span class="hljs-string">&#x27;-C gpunode,TitanX&#x27;</span> ./flood_cuda $(<span class="hljs-built_in">cat</span> test_files/large_mountains.in) &gt; res_cuda.out
+</code></pre>
+<p>For reference, with this particular input file, a naive GPU implementation will achieve &gt;2x speedup, while we expect you to achieve at least a 20x speedup over the sequential code.
+A good implementation can achieve a speedup of &gt;50x. <strong>Can you do better than this?</strong></p>
+<p>We will check your performance with your <code>flood_cuda.cu</code> source code and a set of (hidden) test files and arguments.</p>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>

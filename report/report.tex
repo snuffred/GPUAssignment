@@ -1,0 +1,90 @@
+\documentclass[sigconf, nonacm, review]{acmart}
+\renewcommand\footnotetextcopyrightpermission[1]{} 
+\settopmatter{printacmref=false}
+\pagestyle{plain}
+\begin{document}
+
+
+\title{The title}
+\subtitle{Accelerator-Centric Computing Ecosystems -- Programming Assignment Report }
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+
+
+\author{Author 1}
+\email{author1@mail.com}
+\affiliation{%
+  \institution{Computer Science, VU Amsterdam}
+  \country{}
+}
+
+\author{Author 2}
+\email{author2@mail.com}
+\affiliation{%
+  \institution{Computer Science, VU Amsterdam}
+  \country{}
+}
+\author{Author 3}
+\email{author3@mail.com}
+\affiliation{%
+  \institution{Computer Science, VU Amsterdam}
+  \country{}
+}
+
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+  [Optional]  a high-level description of your solution, analysis overview, and main results
+\end{abstract}
+
+
+
+
+%%
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+\maketitle
+
+\section{Introduction}
+A brief overview of the problem, motivation for GPU acceleration, and the structure of the remainder of the article. Use one short paragraph for each.\\
+
+\noindent
+\textit{Note: you are allowed to deviate from this template as long as the same information is included and it is clear where it is discussed.}
+
+\section{Parallelization}
+In this section, you should explain the design of your parallel solution. For instance (but not limited to):
+\begin{itemize} 
+\item What are the parallelizable sections of the original algorithm and how did you identify them? 
+\item How did you distribute the workload (geometry)?
+\item Have you applied any optimization? Why and how?
+\item Any other considerations you might have made, e.g., memory management, workload distribution, etc.
+\end{itemize}
+
+\section{Implementation details}
+If not already included in the previous section.
+
+\section{Evaluation}
+
+\begin{enumerate}
+\item \textit{Experimental setup}: hardware configuration, software details (CUDA version, compiler, etc.), and considered performance metrics
+\item \textit{Experiments}: 
+\label{experiments} describe the experiments you have conducted to analyze the quality of the performance of your system. This must include at least a speedup analysis (vs. CPU sequential implementation) done with the provided reference datasets. Other experiments can include performance analysis with other dataset sizes, breakdown of execution time, and impact of different optimizations.
+\end{enumerate}
+
+\section{Discussion and Conclusion}
+
+Describe the challenges, limitations, and possible optimizations to your solution. We expect you to provide a summary of your findings and (Optional but encouraged) lessons learned and time sheets (report the time it took to conduct each major part of the assignment.
+
+
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+\end{document}
