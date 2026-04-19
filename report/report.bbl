@@ -1,0 +1,72 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{4}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{} and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showURL}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showURL #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Datta et~al\mbox{.}(2008)]%
+        {datta2008stencil}
+\bibfield{author}{\bibinfo{person}{Kaushik Datta}, \bibinfo{person}{Mark Murphy}, \bibinfo{person}{Vasily Volkov}, \bibinfo{person}{Samuel Williams}, \bibinfo{person}{Jonathan Carter}, \bibinfo{person}{Leonid Oliker}, \bibinfo{person}{David Patterson}, \bibinfo{person}{John Shalf}, {and} \bibinfo{person}{Katherine Yelick}.} \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Stencil Computation Optimization and Auto-tuning on State-of-the-Art Multicore Architectures}. In \bibinfo{booktitle}{\emph{Proceedings of the 2008 ACM/IEEE Conference on Supercomputing}} \emph{(\bibinfo{series}{SC '08})}. \bibinfo{publisher}{IEEE Press}, \bibinfo{pages}{1--12}.
+\newblock
+
+
+\bibitem[Harris(2007)]%
+        {harris2007reduction}
+\bibfield{author}{\bibinfo{person}{Mark Harris}.} \bibinfo{year}{2007}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Optimizing Parallel Reduction in {CUDA}}}.
+\newblock \bibinfo{type}{NVIDIA Developer Technology Whitepaper}. \bibinfo{institution}{NVIDIA Corporation}.
+\newblock
+
+
+\bibitem[Kirk and Hwu(2016)]%
+        {kirk2016programming}
+\bibfield{author}{\bibinfo{person}{David~B. Kirk} {and} \bibinfo{person}{Wen-mei~W. Hwu}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Programming Massively Parallel Processors: A Hands-on Approach} (\bibinfo{edition}{3rd} ed.)}.
+\newblock \bibinfo{publisher}{Morgan Kaufmann}.
+\newblock
+
+
+\bibitem[NVIDIA Corporation(2024)]%
+        {nvidia_best_practices}
+NVIDIA Corporation \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{{CUDA} {C++} Best Practices Guide}}.
+\newblock NVIDIA Corporation.
+\newblock
+\newblock
+\shownote{Version 12.6}.
+
+
+\end{thebibliography}

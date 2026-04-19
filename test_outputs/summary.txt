@@ -1,0 +1,13 @@
+
+Test                   |    Seq (s) |   CUDA (s) |  Speedup | Correctness
+---------------------------------------------------------------------------
+custom_clouds          |   0.413878 |   0.043719 |    9.47x | PASS
+debug                  |   0.084676 |   0.014059 |    6.02x | PASS
+large_mountains        | 187.606382 |   2.207745 |   84.98x | PASS
+medium_higher_dam      |   1.025787 |   0.036404 |   28.18x | PASS
+medium_lower_dam       |   1.013150 |   0.036490 |   27.77x | PASS
+small_mountains        |   0.044898 |   0.015137 |    2.97x | PASS
+---------------------------------------------------------------------------
+TOTAL                  |   190.1890 |     2.3535 |   80.81x | 6 pass, 0 fail
+
+Outputs saved to: ./test_outputs
